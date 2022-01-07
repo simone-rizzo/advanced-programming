@@ -1,8 +1,8 @@
 package com.designframework.Rizzo;
 
-import javafx.util.Pair;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class JobSchedulerFramerowk<K,V> {
@@ -17,10 +17,12 @@ public abstract class JobSchedulerFramerowk<K,V> {
     }
 
     private Stream<Pair<K,V>> compute(Stream<AJob> job){
-        return null;
+        return job.flatMap(x -> x.execute());
     }
+
     private Stream<Pair<K, List<V>>> collect(Stream<Pair<K,V>> computed_stream){
-        return null;
+        var map = computed_stream.collect(Collectors.groupingBy(Pair::getKey, Collectors.mapping(Pair::getValue, Collectors.toList())));
+        return map.entrySet().stream().map(word -> new Pair(word.getKey(), word.getValue()));
     }
 
     /**

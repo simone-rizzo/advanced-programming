@@ -1,7 +1,5 @@
 package com.designframework.Rizzo;
 
-import javafx.util.Pair;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -19,7 +17,6 @@ public class Main {
 	// write your code here
         //MyJobScheduler jobScheduler = new MyJobScheduler();
         //jobScheduler.main();
-        emit().forEach(x-> System.out.println(x));
     }
 
     static Stream<AJob> emit() {
