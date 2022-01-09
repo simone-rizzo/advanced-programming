@@ -1,4 +1,4 @@
-package com.designframework.Rizzo;
+package com.designframework.Rizzo.framework;
 
 public class Pair<K,V>{
     K key;
