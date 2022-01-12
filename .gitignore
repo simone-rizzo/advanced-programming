@@ -1,5 +1,8 @@
 second_assignment/python/.idea
 second_assignment/java/.idea
+first_assignment/exercise2/.idea
+#iml files
+*.iml
 
 # Compiled class file
 *.class
