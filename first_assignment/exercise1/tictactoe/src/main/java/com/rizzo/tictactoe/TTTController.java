@@ -22,6 +22,7 @@ public class TTTController extends JLabel implements VetoableChangeListener,Prop
     static final int XTURN = 1;
     static final int OTURN = 2;
     static final int WINNER = 0;
+    static final int DRAW = 3;
            
     public TTTController() {
         setText("SONO STATO INIZIALIZZATO");
@@ -49,6 +50,11 @@ public class TTTController extends JLabel implements VetoableChangeListener,Prop
         updateText();
         setBackground(Color.decode("#90be6d")); // green color.
     }
+    public void draw(){
+        gameState = DRAW;
+        updateText();
+        setBackground(Color.decode("#0066FF")); // default blue color.
+    }    
     public void reset(){
         gameState = IDLE;
         updateText();
@@ -68,6 +74,9 @@ public class TTTController extends JLabel implements VetoableChangeListener,Prop
             case WINNER:
                 setText("THE WINNER");
                 break;
+            case DRAW:
+                setText("DRAW");
+                break;
         }
     }  
 
@@ -77,6 +86,8 @@ public class TTTController extends JLabel implements VetoableChangeListener,Prop
             reset();
         }else if(evt.getPropertyName().equals("win")){
             winner();
+        }else if(evt.getPropertyName().equals("draw")){
+            draw();
         }
     }
     

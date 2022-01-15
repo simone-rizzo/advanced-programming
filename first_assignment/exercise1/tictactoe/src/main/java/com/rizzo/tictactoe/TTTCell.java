@@ -22,7 +22,7 @@ import javax.swing.UIManager;
  */
 public class TTTCell extends javax.swing.JPanel implements PropertyChangeListener {
 
-    private Color[] colors = {UIManager.getColor("Panel.background"),Color.decode("#FFFF41"),Color.decode("#E000FF"),Color.decode("#90be6d")};
+    private Color[] colors = {UIManager.getColor("Panel.background"),Color.decode("#FFFF41"),Color.decode("#E000FF"),Color.decode("#00E000")};
     
     public Color getColor(){
         return colors[cellstate.getValue()];
@@ -66,6 +66,8 @@ public class TTTCell extends javax.swing.JPanel implements PropertyChangeListene
             if(cells.contains(this)){
                 winner();
             }
+        }else if(evt.getPropertyName().equals("draw")){
+            
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -133,8 +135,10 @@ public class TTTCell extends javax.swing.JPanel implements PropertyChangeListene
     }//GEN-LAST:event_oButtonActionPerformed
 
     public void winner(){
-        setCellState(State.WIN);
+        this.cellstate = State.WIN;
+        this.setBackground(getColor());
     }
+    
     public void setCellState(State newState){
         try {
             vtoCngSpp.fireVetoableChange("cellState", getCellState(), newState); //if it doesnt launch an exception we can continue.
@@ -161,6 +165,11 @@ public class TTTCell extends javax.swing.JPanel implements PropertyChangeListene
             System.out.println("wrong action");
         }
     }
+    public void disable(){
+        oButton.setEnabled(false);        
+        xButton.setEnabled(false);
+    }
+    
     public void reset(){
         cellstate=State.INIT;
         oButton.setText("O");

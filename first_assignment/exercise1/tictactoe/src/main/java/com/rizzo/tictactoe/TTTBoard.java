@@ -224,6 +224,7 @@ public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListen
         }
         else if(cellnum==0){
             System.out.println("sono finite le celle");
+            prpCngSpp.firePropertyChange("draw", null, null);
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
