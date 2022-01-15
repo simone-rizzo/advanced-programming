@@ -4,12 +4,38 @@
  */
 package com.rizzo.tictactoe;
 
+import java.awt.Color;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
+import java.beans.VetoableChangeSupport;
+import javax.swing.UIManager;
+
 /**
  *
  * @author Simone
  */
 public class TTTCell extends javax.swing.JPanel {
 
+    public enum State {
+        INIT(UIManager.getColor("Panel.background")),
+        X(Color.decode("#FFFF41")),
+        O(Color.decode("#E000FF")),
+        WIN(Color.decode("#90be6d"));
+        private final Color color;        
+        State(final Color color) {
+            this.color = color;
+        }
+        public Color getColor(){
+            return color;
+        }
+    }
+    private State cellstate = State.INIT;
+    private final VetoableChangeSupport mVcs = new VetoableChangeSupport(this);
+    
+    public State getCellState(){
+        return this.cellstate;
+    }
+    
     /**
      * Creates new form TTTCell
      */
@@ -17,6 +43,12 @@ public class TTTCell extends javax.swing.JPanel {
         initComponents();
     }
 
+    /**
+    * Add new vetoable change listener.
+    */
+    public void addVetoChangeListener(VetoableChangeListener listener) {
+        mVcs.addVetoableChangeListener(listener);
+    } 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,13 +64,27 @@ public class TTTCell extends javax.swing.JPanel {
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         setMaximumSize(new java.awt.Dimension(100, 100));
 
-        oButton.setText("xButton");
+        oButton.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        oButton.setText("O");
         oButton.setAlignmentY(0.0F);
-        oButton.setBorder(null);
+        oButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        oButton.setContentAreaFilled(false);
+        oButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                oButtonActionPerformed(evt);
+            }
+        });
 
-        xButton1.setText("xButton");
+        xButton1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        xButton1.setText("X");
         xButton1.setAlignmentY(0.0F);
-        xButton1.setBorder(null);
+        xButton1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        xButton1.setContentAreaFilled(false);
+        xButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -56,6 +102,36 @@ public class TTTCell extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void xButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xButton1ActionPerformed
+        // TODO add your handling code here:
+        this.setCellState(State.X);
+    }//GEN-LAST:event_xButton1ActionPerformed
+
+    private void oButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oButtonActionPerformed
+        // TODO add your handling code here:
+        this.setCellState(State.O);
+    }//GEN-LAST:event_oButtonActionPerformed
+
+    public void setCellState(State newState){
+        try {
+            mVcs.fireVetoableChange("cellState", getCellState(), newState); //if it doesnt launch an exception we can continue.
+            this.cellstate = newState;
+            this.setBackground(this.cellstate.getColor());
+            switch(newState){
+                case O:
+                    xButton1.setText("");
+                    xButton1.setEnabled(false);
+                    break;
+                case X:
+                    oButton.setText("");
+                    oButton.setEnabled(false);
+                    break;
+            }
+        }
+        catch(PropertyVetoException exception){
+            exception.printStackTrace();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton oButton;

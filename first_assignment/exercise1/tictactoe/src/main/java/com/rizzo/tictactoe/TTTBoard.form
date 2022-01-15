@@ -28,25 +28,25 @@
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="tTTCell2" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell20" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tTTCell8" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell21" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tTTCell9" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell22" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="tTTCell1" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell00" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tTTCell3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell01" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tTTCell4" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell02" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="tTTCell5" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell10" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tTTCell6" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell11" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tTTCell7" min="-2" max="-2" attributes="0"/>
+                      <Component id="cell12" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="Controller" min="-2" max="-2" attributes="0"/>
@@ -63,21 +63,21 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="tTTCell1" min="-2" max="-2" attributes="0"/>
-                  <Component id="tTTCell3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tTTCell4" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell00" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell01" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell02" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="tTTCell5" min="-2" max="-2" attributes="0"/>
-                  <Component id="tTTCell6" min="-2" max="-2" attributes="0"/>
-                  <Component id="tTTCell7" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell10" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell11" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell12" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="tTTCell2" min="-2" max="-2" attributes="0"/>
-                  <Component id="tTTCell8" min="-2" max="-2" attributes="0"/>
-                  <Component id="tTTCell9" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell20" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell21" min="-2" max="-2" attributes="0"/>
+                  <Component id="cell22" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="56" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -92,29 +92,26 @@
   <SubComponents>
     <Component class="com.rizzo.tictactoe.TTTController" name="Controller">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="33" green="99" red="ff" type="rgb"/>
-        </Property>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell1">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell00">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell3">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell01">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell4">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell02">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell5">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell10">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell6">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell11">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell7">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell12">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell2">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell20">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell8">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell21">
     </Component>
-    <Component class="com.rizzo.tictactoe.TTTCell" name="tTTCell9">
+    <Component class="com.rizzo.tictactoe.TTTCell" name="cell22">
     </Component>
     <Component class="javax.swing.JButton" name="restartButton">
       <Properties>
