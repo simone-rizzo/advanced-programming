@@ -4,37 +4,56 @@
  */
 package com.rizzo.tictactoe;
 
+import com.rizzo.tictactoe.StateEnum.State;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
  * @author Simone
  */
-public class TTTBoard extends javax.swing.JFrame {
+public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListener {
 
-    private List<TTTCell> matrix;
+    private List<TTTCell> cellsGrid;
+    private int cellnum=9;
+    private final PropertyChangeSupport prpCngSpp = new PropertyChangeSupport(this);
     /**
      * Creates new form TTTBoard
      */
     public TTTBoard() {
         initComponents();
+        initMatrix();
+    }
+    
+    public void addPropChangeListener(PropertyChangeListener listner){
+        prpCngSpp.addPropertyChangeListener(listner);
     }
     
     public void initMatrix(){
         // insert all cells inside a datastructure
-        this.matrix.add(cell00);
-        this.matrix.add(cell01);
-        this.matrix.add(cell02);
-        this.matrix.add(cell10);
-        this.matrix.add(cell11);
-        this.matrix.add(cell12);
-        this.matrix.add(cell20);
-        this.matrix.add(cell21);
-        this.matrix.add(cell22);
+        this.cellsGrid = new ArrayList<>();
+        this.cellsGrid.add(cell00);
+        this.cellsGrid.add(cell01);
+        this.cellsGrid.add(cell02);
+        this.cellsGrid.add(cell10);
+        this.cellsGrid.add(cell11);
+        this.cellsGrid.add(cell12);
+        this.cellsGrid.add(cell20);
+        this.cellsGrid.add(cell21);
+        this.cellsGrid.add(cell22);
         
+        int i=0;
         // attach for each cell the controller listener
-        for(TTTCell c:this.matrix){
-            c.addVetoChangeListener(this.Controller);
+        for(TTTCell c:this.cellsGrid){
+            c.addVetoChangeListener(this.controller);
+            c.setCellId(i);
+            this.addPropChangeListener(c);
+            c.addPropChangeListener(this);
+            this.addPropChangeListener(this.controller);
         }
     }
 
@@ -47,7 +66,7 @@ public class TTTBoard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Controller = new com.rizzo.tictactoe.TTTController();
+        controller = new com.rizzo.tictactoe.TTTController();
         cell00 = new com.rizzo.tictactoe.TTTCell();
         cell01 = new com.rizzo.tictactoe.TTTCell();
         cell02 = new com.rizzo.tictactoe.TTTCell();
@@ -62,11 +81,21 @@ public class TTTBoard extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Rizzo TIC-TAC-TOE");
 
-        Controller.setToolTipText("");
+        controller.setBackground(new java.awt.Color(0, 102, 255));
+        controller.setForeground(new java.awt.Color(255, 255, 255));
+        controller.setToolTipText("");
+        controller.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        controller.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        controller.setOpaque(true);
 
         restartButton.setBackground(new java.awt.Color(255, 0, 51));
         restartButton.setText("RESTART");
         restartButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+        restartButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restartButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,10 +122,10 @@ public class TTTBoard extends javax.swing.JFrame {
                         .addComponent(cell11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cell12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(Controller, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(controller, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(restartButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(restartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -119,13 +148,19 @@ public class TTTBoard extends javax.swing.JFrame {
                     .addComponent(cell22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Controller, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(controller, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(restartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void restartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartButtonActionPerformed
+        // TODO add your handling code here:
+        this.cellnum=9;
+        prpCngSpp.firePropertyChange("reset", null, null);
+    }//GEN-LAST:event_restartButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,7 +198,6 @@ public class TTTBoard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.rizzo.tictactoe.TTTController Controller;
     private com.rizzo.tictactoe.TTTCell cell00;
     private com.rizzo.tictactoe.TTTCell cell01;
     private com.rizzo.tictactoe.TTTCell cell02;
@@ -173,6 +207,49 @@ public class TTTBoard extends javax.swing.JFrame {
     private com.rizzo.tictactoe.TTTCell cell20;
     private com.rizzo.tictactoe.TTTCell cell21;
     private com.rizzo.tictactoe.TTTCell cell22;
+    private com.rizzo.tictactoe.TTTController controller;
     private javax.swing.JButton restartButton;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Here we get all the clicked cell, we compute if the game is ended by evidencing the tris.
+     * @param evt 
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        cellnum-=1;
+        Optional<List<TTTCell>> cells = isGameEnded();
+        if(cells.isPresent()){
+            prpCngSpp.firePropertyChange("win", null, cells.get());
+        }
+        else if(cellnum==0){
+            System.out.println("sono finite le celle");
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public List<TTTCell> checkIfEqual(List winningcells, TTTCell c1, TTTCell c2,TTTCell c3){        
+        if(c1.getCellState() != State.INIT && c1.getCellState() == c2.getCellState() && c2.getCellState()  == c3.getCellState()){
+            winningcells.add(c3);
+            winningcells.add(c2);
+            winningcells.add(c1);
+            return winningcells;
+        }
+        return winningcells;
+    }
+    
+    private Optional<List<TTTCell>> isGameEnded(){
+        List<TTTCell> winningcells = new ArrayList<>();
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(0),cellsGrid.get(1),cellsGrid.get(2));
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(3),cellsGrid.get(4),cellsGrid.get(5));
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(6),cellsGrid.get(7),cellsGrid.get(8));
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(0),cellsGrid.get(3),cellsGrid.get(6));
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(1),cellsGrid.get(4),cellsGrid.get(7));
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(2),cellsGrid.get(5),cellsGrid.get(8));
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(0),cellsGrid.get(4),cellsGrid.get(8));
+        winningcells = checkIfEqual(winningcells,cellsGrid.get(6),cellsGrid.get(4),cellsGrid.get(2));
+        if(winningcells.size()>0)
+            return Optional.of(winningcells);
+        else return Optional.empty();
+    }
 }
