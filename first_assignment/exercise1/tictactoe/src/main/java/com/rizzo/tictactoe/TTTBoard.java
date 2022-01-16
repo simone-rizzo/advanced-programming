@@ -4,7 +4,7 @@
  */
 package com.rizzo.tictactoe;
 
-import com.rizzo.tictactoe.StateEnum.State;
+import com.rizzo.tictactoe.CellStates;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ * The main containin the cells that let you play Tic Tac Toe.
  * @author Simone
  */
 public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListener {
@@ -21,19 +21,26 @@ public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListen
     private List<TTTCell> cellsGrid;
     private int cellnum=9;
     private final PropertyChangeSupport prpCngSpp = new PropertyChangeSupport(this);
+    
     /**
      * Creates new form TTTBoard
      */
     public TTTBoard() {
         initComponents();
-        initMatrix();
+        initCellsGrid();
     }
     
     public void addPropChangeListener(PropertyChangeListener listner){
         prpCngSpp.addPropertyChangeListener(listner);
     }
     
-    public void initMatrix(){
+    /**
+     * We initialize the grid and assign the listner between:
+     * Board -> cells: for the end game conditions.
+     * cells -> Board: for the varius action.
+     * Board -> controller: for the end game conditios.
+     */
+    public void initCellsGrid(){
         // insert all cells inside a datastructure
         this.cellsGrid = new ArrayList<>();
         this.cellsGrid.add(cell00);
@@ -50,7 +57,6 @@ public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListen
         // attach for each cell the controller listener
         for(TTTCell c:this.cellsGrid){
             c.addVetoChangeListener(this.controller);
-            c.setCellId(i);
             this.addPropChangeListener(c);
             c.addPropChangeListener(this);
             this.addPropChangeListener(this.controller);
@@ -155,7 +161,10 @@ public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListen
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Reset button pressed reinitialize the game from the beginning.
+     * @param evt 
+     */
     private void restartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartButtonActionPerformed
         // TODO add your handling code here:
         this.cellnum=9;
@@ -212,25 +221,32 @@ public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListen
     // End of variables declaration//GEN-END:variables
 
     /**
-     * Here we get all the clicked cell, we compute if the game is ended by evidencing the tris.
-     * @param evt 
+     * We compute if the game is ended by evidencing the tris.
+     * @param evt event launched from the cells.
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         cellnum-=1;
         Optional<List<TTTCell>> cells = isGameEnded();
         if(cells.isPresent()){
-            prpCngSpp.firePropertyChange("win", null, cells.get());
+            CellStates the_winner_is = cells.get().get(0).getCellState();
+            prpCngSpp.firePropertyChange("win", null, cells.get()); //we fire that the game is ended with the list of cells.
+            prpCngSpp.firePropertyChange("winner_is", null, the_winner_is); //we fire that the game is ended with the winner X/O.
         }
-        else if(cellnum==0){
-            System.out.println("sono finite le celle");
+        else if(cellnum==0){ //if we have used all the cells and no one have won the conclusion is a draw.
             prpCngSpp.firePropertyChange("draw", null, null);
-        }
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        } 
     }
-    
+    /**
+     * Checks if a triple of cells given as parameters have the same state.
+     * @param winningcells
+     * @param c1
+     * @param c2
+     * @param c3
+     * @return a list of winning cells if true otherwise empty list.
+     */
     public List<TTTCell> checkIfEqual(List winningcells, TTTCell c1, TTTCell c2,TTTCell c3){        
-        if(c1.getCellState() != State.INIT && c1.getCellState() == c2.getCellState() && c2.getCellState()  == c3.getCellState()){
+        if(c1.getCellState() != CellStates.INIT && c1.getCellState() == c2.getCellState() && c2.getCellState()  == c3.getCellState()){
             winningcells.add(c3);
             winningcells.add(c2);
             winningcells.add(c1);
@@ -238,7 +254,10 @@ public class TTTBoard extends javax.swing.JFrame implements PropertyChangeListen
         }
         return winningcells;
     }
-    
+    /**
+     * Checks if the game is ended by controlling all the cases.
+     * @return the list of the winning cells otherwise empty optional.
+     */
     private Optional<List<TTTCell>> isGameEnded(){
         List<TTTCell> winningcells = new ArrayList<>();
         winningcells = checkIfEqual(winningcells,cellsGrid.get(0),cellsGrid.get(1),cellsGrid.get(2));

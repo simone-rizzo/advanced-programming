@@ -4,7 +4,7 @@
  */
 package com.rizzo.tictactoe;
 
-import com.rizzo.tictactoe.StateEnum.State;
+import com.rizzo.tictactoe.CellStates;
 import java.awt.Color;
 import java.awt.PageAttributes;
 import java.beans.PropertyChangeEvent;
@@ -17,26 +17,22 @@ import java.util.List;
 import javax.swing.UIManager;
 
 /**
- *
+ * Single cell of the Table. It contains two button rappresenting the X/O action.
  * @author Simone
  */
 public class TTTCell extends javax.swing.JPanel implements PropertyChangeListener {
 
-    private Color[] colors = {UIManager.getColor("Panel.background"),Color.decode("#FFFF41"),Color.decode("#E000FF"),Color.decode("#00E000")};
+    private Color[] colors = {UIManager.getColor("Panel.background"),Color.decode("#FFFF41"),Color.decode("#E000FF")};
     
     public Color getColor(){
         return colors[cellstate.getValue()];
     }   
     
-    private State cellstate = State.INIT;
+    private CellStates cellstate = CellStates.INIT;
     private final VetoableChangeSupport vtoCngSpp = new VetoableChangeSupport(this);
     private final PropertyChangeSupport prpCngSpp = new PropertyChangeSupport(this);
     
-    private int cellId;
-    public void setCellId(int id){
-        this.cellId = id;
-    }
-    public State getCellState(){
+    public CellStates getCellState(){
         return this.cellstate;
     }
     
@@ -45,6 +41,7 @@ public class TTTCell extends javax.swing.JPanel implements PropertyChangeListene
      */
     public TTTCell() {
         initComponents();
+        reset();
     }
 
     /**
@@ -57,17 +54,24 @@ public class TTTCell extends javax.swing.JPanel implements PropertyChangeListene
         prpCngSpp.addPropertyChangeListener(listner);
     }
     
+    /**
+     * Control the messages arriving from the Board, and we change our state according to them.
+     * @param evt 
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals("reset")){
             reset();
         }else if(evt.getPropertyName().equals("win")){
+            //if the game is ended we controll if our cell must me colored as winning one.
             List<TTTCell> cells = (List<TTTCell>)evt.getNewValue();
             if(cells.contains(this)){
                 winner();
+            }else{
+                disable(); //we disable the buttons to make evicence on the tris.
             }
         }else if(evt.getPropertyName().equals("draw")){
-            
+            //nothing
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -126,52 +130,65 @@ public class TTTCell extends javax.swing.JPanel implements PropertyChangeListene
 
     private void xButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xButtonActionPerformed
         // TODO add your handling code here:
-        this.setCellState(State.X);
+        this.setCellState(CellStates.X);
     }//GEN-LAST:event_xButtonActionPerformed
 
     private void oButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oButtonActionPerformed
         // TODO add your handling code here:
-        this.setCellState(State.O);
+        this.setCellState(CellStates.O);
     }//GEN-LAST:event_oButtonActionPerformed
 
+    /**
+     * Set the cell to winner mode.
+     */
     public void winner(){
-        this.cellstate = State.WIN;
-        this.setBackground(getColor());
+        this.setBackground(Color.decode("#00E000")); //Green color
     }
     
-    public void setCellState(State newState){
-        try {
-            vtoCngSpp.fireVetoableChange("cellState", getCellState(), newState); //if it doesnt launch an exception we can continue.
-            this.cellstate = newState;
-            this.setBackground(getColor());
-            switch(newState){
-                case O:
-                    xButton.setText("");
-                    xButton.setEnabled(false);
-                    break;
-                case X:
-                    oButton.setText("");
-                    oButton.setEnabled(false);
-                    break;
-                case WIN:
-                    xButton.setEnabled(false);
-                    oButton.setEnabled(false);
-                    break;
+    /**
+     * Set the cell state.
+     * @param newState 
+     */
+    public void setCellState(CellStates newState){
+        if(getCellState() != newState){ //this control is necessary because from the deocumentation of fireVetoableChange
+            //(No event is fired if old and new values are equal and non-null.) so the Controller cant put a veto to this action.
+            try {
+                //we fire the change that we want to made if no exception is ok otherwise the action is blocked so nothing.
+                vtoCngSpp.fireVetoableChange("vetocellState", getCellState(), newState); //if it doesnt launch an exception we can continue.
+                this.cellstate = newState;
+                this.setBackground(getColor());
+                switch(newState){
+                    case O:
+                        xButton.setText("");
+                        xButton.setEnabled(false);
+                        break;
+                    case X:
+                        oButton.setText("");
+                        oButton.setEnabled(false);
+                        break;
+                }
+                //we send the canges to the Board listener in order tho let it know that we made and action.
+                prpCngSpp.firePropertyChange("cellstate", null, null);            
             }
-            prpCngSpp.firePropertyChange("cellstate", null, null);
-        }
-        catch(PropertyVetoException exception){
-            //exception.printStackTrace();
-            System.out.println("wrong action");
+            catch(PropertyVetoException exception){
+                //exception.printStackTrace();
+                System.out.println("wrong action");
+            }
         }
     }
+    /**
+     * Disable the two buttons.
+     */
     public void disable(){
         oButton.setEnabled(false);        
         xButton.setEnabled(false);
     }
     
+    /**
+     * We reset the initial values for the cell.
+     */
     public void reset(){
-        cellstate=State.INIT;
+        cellstate=CellStates.INIT;
         oButton.setText("O");
         oButton.setEnabled(true);        
         xButton.setEnabled(true);
