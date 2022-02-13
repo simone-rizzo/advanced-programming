@@ -51,9 +51,9 @@ values (Dict val) = getvalues val []
       getvalues [] res = res
       getvalues ((a,b):l) res = getvalues l (b ++ res) 
 
-
+-- we take a dictionary and we add the other by using insertl function.
 merge :: Eq a => Dictionary a b -> Dictionary a b -> Dictionary a b
-merge (Dict dict1) (Dict dict2) = foldl (\acc x -> insertl acc x) (empty ()) (dict1 ++ dict2)
+merge (Dict dict1) (Dict dict2) = foldl (\acc x -> insertl acc x) (Dict dict1) (dict2)
 
 
 -- Insert in the dictionary a list with key k by preserving the

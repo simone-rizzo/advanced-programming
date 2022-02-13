@@ -5,7 +5,7 @@ import statistics
 
 def bench(n_threads=1, seq_iter=1, iter=1):
     """
-
+    Args
     :param n_threads: The number of threads
     :param seq_iter:  The number of times fun must be invoked in each thread
     :param iter:      The number of times the whole execution of the n_threads
@@ -91,3 +91,22 @@ def test(iter, fun, args):
 test(10, grezzo, 20) #test proved
 test(10, just_wait, 1)
 
+"""
+Final consideration:
+
+By performing the benchmark with two different functions,
+one CPU intensive while the other NO operation, we obtained the following results:
+
+In the [intensive one] we see that by increasing the number of treads we do not have a decrease in the total time of
+execution but rather an increase, this can be seen immediately even with only two threads, where the time is more than
+double that to single thread. In my case with my processor we have 0.39s with one thread against 0.89s using two, this one
+the literature demonstrates that "Two threads calling a function may take twice as much time as a single thread calling the function twice".
+This is because of the GIL Global Interpreter Lock where only one thread can be executed at a time, therefore
+going to spawn more threads will produce a round robin scheduling between threads with a noticeable increase in overhead.
+
+In the [no operation] we see instead a totally opposite trend in which going to increase the threads we have a decrease
+of the total running time. This is because since the operation is a Sleep the threads still compete to go in
+execution with the difference that when they wait anyway the sleep time is decreased, for this reason with this
+operation with multiple threads will have a shorter time as they wait in (parallel) while with a single thread this will have to
+wait for the time multiplied by the number of threads.
+"""
